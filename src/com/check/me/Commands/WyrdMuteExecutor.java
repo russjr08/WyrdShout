@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import ru.tehkode.permissions.PermissionManager;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 /**
  * This class manages mute commands
@@ -18,6 +20,10 @@ public class WyrdMuteExecutor implements CommandExecutor {
     	  
     private WyrdShout plugin;
 
+    /**
+     * Connects the class with the rest of the plugin.
+     * @param plugin
+     */
     public WyrdMuteExecutor(WyrdShout plugin)
     {
         this.plugin = plugin;
@@ -31,14 +37,16 @@ public class WyrdMuteExecutor implements CommandExecutor {
      * @param cmd Command
      * @param label Alias
      * @param args Arguments
+     * @return True or false wether the command were executed or not.
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
         WyrdShoutUtil util = new WyrdShoutUtil();
             if(cmd.getName().equalsIgnoreCase("wmute") || cmd.getName().equalsIgnoreCase("wm") || cmd.getName().equalsIgnoreCase("wyrdmute")){
+                PermissionManager pex = PermissionsEx.getPermissionManager();
             if(sender instanceof Player){
             Player player = (Player) sender;
-                if(plugin.permCheck(player, "wshout.admin.mute") || plugin.permCheck(player, "wshout.admin.*") || plugin.permCheck(player, "wshout.*")){
+                if(pex.has(player, "wshout.admin.mute") || pex.has(player, "wshout.admin.*") || pex.has(player, "wshout.*")){
                         if(args.length >= 1){
                             player.sendMessage(ChatColor.RED + "Not enough arguments!");
                         } else if(args.length <= 5){

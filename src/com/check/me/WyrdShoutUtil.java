@@ -17,6 +17,11 @@ public class WyrdShoutUtil {
 	 
 	private WyrdShout plugin;
         
+        /**
+         * Connects this class to the rest of the plugin.
+         * 
+         * @Author Highace2
+         */
         public WyrdShoutUtil(){
             this.plugin = plugin;
         }
