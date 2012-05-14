@@ -24,13 +24,13 @@ public class WyrdShoutExecutor implements CommandExecutor {
      * Saves the time for how long time there goes before player can use the shout command again.
      * @author Highace2
      */
-    public static HashMap<Player, Long> shoutTimer = new HashMap<>();
+    public static HashMap<String, Long> shoutTimer = new HashMap<>();
      
     /**
      * Saves the time for how long a player have been muted.
      * @author Highace2
      */
-    public static HashMap<Player, Long> muteTimer = new HashMap<>();
+    public static HashMap<String, Long> muteTimer = new HashMap<>();
     
     private WyrdShout plugin;
     
@@ -43,7 +43,7 @@ public class WyrdShoutExecutor implements CommandExecutor {
 	    this.plugin = plugin;
           }
             
-    Logger log = Logger.getLogger("Minecraft");
+    private static final Logger log = Logger.getLogger("Minecraft");
     
     /**
      * Everything with shouting your message to the server.
@@ -62,12 +62,14 @@ public class WyrdShoutExecutor implements CommandExecutor {
                 Player player = (Player) sender;
                 if(args.length != 0){
                         if(pex.has(player, "wyrdshout.shout") || pex.has(player, "wyrdshout.*")){
-                            Long muteTime = muteTimer.get(player);
+                            Long muteTime = muteTimer.get(player.getName());
                             if(muteTime == null || muteTime <= System.currentTimeMillis()){
-                                Long lastCommand = shoutTimer.get(player);
-                                if(lastCommand == null || lastCommand <= System.currentTimeMillis()){
-                                    PermissionUser user = PermissionsEx.getUser(player);
-                                    if(user.getPrefix() == null){
+                                Long lastCommand = shoutTimer.get(player.getName());
+                                if(lastCommand != null){
+                                    lastCommand += plugin.getConfig().getInt("shout.delay");
+                                    if(lastCommand <= System.currentTimeMillis()){
+                                        PermissionUser user = PermissionsEx.getUser(player);
+                                        if(user.getPrefix() == null){
                                             if(pex.has(player, "wshout.override") || pex.has(player, "wshout.*")){
                                                 plugin.reloadConfig();
                                                 Bukkit.broadcastMessage(util.colorizeMessages(plugin.getConfig().getString("shout.shout-prefix") + util.messageNonPrefix(player, args)));
@@ -75,7 +77,7 @@ public class WyrdShoutExecutor implements CommandExecutor {
                                             } else {
                                                 plugin.reloadConfig();
                                                 Bukkit.broadcastMessage(util.colorizeMessages(plugin.getConfig().getString("shout.shout-prefix") + util.messageNonPrefix(player, args)));
-                                                shoutTimer.put(player, System.currentTimeMillis() + plugin.getConfig().getLong("shout.delay"));
+                                                shoutTimer.put(player.getName(), System.currentTimeMillis());
                                                 log.info("do not override");
                                             }
                                             return true;
@@ -87,13 +89,14 @@ public class WyrdShoutExecutor implements CommandExecutor {
                                             } else {
                                                 plugin.reloadConfig();
                                                 Bukkit.broadcastMessage(util.colorizeMessages(plugin.getConfig().getString("shout.shout-prefix") + util.messagePrefix(player, args)));
-                                                shoutTimer.put(player, System.currentTimeMillis() + plugin.getConfig().getLong("shout.delay"));
+                                                shoutTimer.put(player.getName(), System.currentTimeMillis());
                                                 log.info("do not override with prefix");
                                             }
                                             return true;
                                         }
-                                } else {
-                                   player.sendMessage(ChatColor.RED + "You must wait " + util.formatTime(shoutTimer.get(player) - System.currentTimeMillis()) + " before using this command again!");
+                                    } else {
+                                        player.sendMessage(ChatColor.RED + "You must wait " + util.formatTime(shoutTimer.get(player) - System.currentTimeMillis()) + " before using this command again!");
+                                    }
                                 }
                             } else {
                                 player.sendMessage(ChatColor.RED + "You've been muted for " + util.formatTime(muteTimer.get(player) - System.currentTimeMillis()) + "!");

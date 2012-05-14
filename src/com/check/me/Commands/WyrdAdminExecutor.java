@@ -26,7 +26,7 @@ public class WyrdAdminExecutor implements CommandExecutor {
         this.plugin = plugin;
     }
 
-    Logger log = Logger.getLogger("Minecraft");
+    private static final Logger log = Logger.getLogger("Minecraft");
     
     /**
      * Configures every single thing about admin commands

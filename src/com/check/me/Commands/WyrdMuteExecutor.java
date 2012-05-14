@@ -29,7 +29,7 @@ public class WyrdMuteExecutor implements CommandExecutor {
         this.plugin = plugin;
     }
     
-    Logger log = Logger.getLogger("Minecraft");
+    private static final Logger log = Logger.getLogger("Minecraft");
     
     /**
      * Method manages mute commands. 
@@ -68,7 +68,7 @@ public class WyrdMuteExecutor implements CommandExecutor {
                                     }
                                 }
                                 Player mutePlayer = Bukkit.getPlayer(args[0]);
-                                WyrdShoutExecutor.muteTimer.put(mutePlayer, (System.currentTimeMillis() + finalResult));
+                                WyrdShoutExecutor.muteTimer.put(mutePlayer.getName(), (System.currentTimeMillis() + finalResult));
                             } else {
                                 player.sendMessage(ChatColor.DARK_AQUA + "[WyrdShout]" + ChatColor.BLUE + args[0] + " is not online!");
                             }
