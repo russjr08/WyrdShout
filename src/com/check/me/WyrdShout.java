@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class WyrdShout extends JavaPlugin {
     
-    Logger log = Logger.getLogger("Minecraft");
+    private static final Logger log = Logger.getLogger("Minecraft");
     
     /**
      * Get message and save config when the plugin is disabled.
@@ -24,7 +24,6 @@ public class WyrdShout extends JavaPlugin {
      */
     @Override
     public void onDisable(){
-        log = this.getLogger();
         saveConfig();
         log.info("Config saved");
     }
@@ -56,7 +55,6 @@ public class WyrdShout extends JavaPlugin {
         getCommand("wa").setExecutor(WyrdAdminExecutor);
         
         loadConfig();
-        log = this.getLogger();
         log.info("Config loaded");
     }
     
