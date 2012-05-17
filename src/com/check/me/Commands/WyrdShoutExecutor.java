@@ -63,7 +63,7 @@ public class WyrdShoutExecutor implements CommandExecutor {
                 if(args.length != 0){
                         if(pex.has(player, "wyrdshout.shout") || pex.has(player, "wyrdshout.*")){
                                 Long lastCommand = shoutTimer.get(player.getName());
-                                lastCommand += plugin.getConfig().getLong("shout.delay");
+                                lastCommand += plugin.getConfig().getInt("shout.delay");
                                     if(lastCommand == null || lastCommand <= System.currentTimeMillis()){
                                         PermissionUser user = PermissionsEx.getUser(player);
                                         if(user.getPrefix() == null){
