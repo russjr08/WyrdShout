@@ -62,45 +62,24 @@ public class WyrdShoutExecutor implements CommandExecutor {
                 Player player = (Player) sender;
                 if(args.length != 0){
                         if(pex.has(player, "wyrdshout.shout") || pex.has(player, "wyrdshout.*")){
-                            Long muteTime = muteTimer.get(player.getName());
-                            if(muteTime == null || muteTime <= System.currentTimeMillis()){
                                 Long lastCommand = shoutTimer.get(player.getName());
-                                if(lastCommand != null){
-                                    lastCommand += plugin.getConfig().getInt("shout.delay");
-                                    if(lastCommand <= System.currentTimeMillis()){
+                                lastCommand += plugin.getConfig().getLong("shout.delay");
+                                    if(lastCommand == null || lastCommand <= System.currentTimeMillis()){
                                         PermissionUser user = PermissionsEx.getUser(player);
                                         if(user.getPrefix() == null){
-                                            if(pex.has(player, "wshout.override") || pex.has(player, "wshout.*")){
-                                                plugin.reloadConfig();
-                                                Bukkit.broadcastMessage(util.colorizeMessages(plugin.getConfig().getString("shout.shout-prefix") + util.messageNonPrefix(player, args)));
-                                                log.info("overrides");
-                                            } else {
                                                 plugin.reloadConfig();
                                                 Bukkit.broadcastMessage(util.colorizeMessages(plugin.getConfig().getString("shout.shout-prefix") + util.messageNonPrefix(player, args)));
                                                 shoutTimer.put(player.getName(), System.currentTimeMillis());
-                                                log.info("do not override");
-                                            }
                                             return true;
                                         } else {
-                                            if(pex.has(player, "wshout.override") || pex.has(player, "wshout.*")){
-                                                plugin.reloadConfig();
-                                                Bukkit.broadcastMessage(util.colorizeMessages(plugin.getConfig().getString("shout.shout-prefix") + util.messagePrefix(player, args)));
-                                                log.info("overrides with prefix");
-                                            } else {
                                                 plugin.reloadConfig();
                                                 Bukkit.broadcastMessage(util.colorizeMessages(plugin.getConfig().getString("shout.shout-prefix") + util.messagePrefix(player, args)));
                                                 shoutTimer.put(player.getName(), System.currentTimeMillis());
-                                                log.info("do not override with prefix");
-                                            }
                                             return true;
                                         }
                                     } else {
-                                        player.sendMessage(ChatColor.RED + "You must wait " + util.formatTime(shoutTimer.get(player) - System.currentTimeMillis()) + " before using this command again!");
+                                        player.sendMessage(ChatColor.RED + "You must wait " + util.formatTime(shoutTimer.get(player.getName()) - System.currentTimeMillis()) + " before using this command again!");
                                     }
-                                }
-                            } else {
-                                player.sendMessage(ChatColor.RED + "You've been muted for " + util.formatTime(muteTimer.get(player) - System.currentTimeMillis()) + "!");
-                            }
                         } else {
                             player.sendMessage(ChatColor.RED + "You don't have access to that command!");
                         }
