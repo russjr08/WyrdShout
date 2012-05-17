@@ -62,7 +62,7 @@ public class WyrdShout extends JavaPlugin {
      * Creates all configs.
      */
         public void loadConfig(){
-            new File("Plugins/WyrdShout").mkdir();
+            //new File("Plugins/WyrdShout").mkdir(); Please remove this, bukkit creates a config by itself -russjr08
             getConfig().options().header("WyrdShout version 0.3");
             getConfig().addDefault("shout.shout-prefix" , "&c[Shout]");
             getConfig().addDefault("shout.delay", 150);
